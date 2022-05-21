@@ -52,7 +52,7 @@
                 <div class="fixWidth">
                   <i class="red-bg">加价购</i>
                   <em class="t-gray"
-                    >满999.00另加20.00元，或满1999.00另加30.00元，或满2999.00另加40.00元，即可在购物车换购热销商品</em
+                    >满999.00另加20.00元,或满1999.00另加30.00元,或满2999.00另加40.00元，即可在购物车换购热销商品</em
                   >
                 </div>
               </div>
@@ -82,8 +82,8 @@
                   changepirce="0"
                   v-for="value in spu.spuSaleAttrValueList"
                   :key="value.id"
-                  :class="{active:value.isChecked==1}"
-                  @click="changeActive(value,spu.spuSaleAttrValueList)"
+                  :class="{ active: value.isChecked == 1 }"
+                  @click="changeActive(value, spu.spuSaleAttrValueList)"
                 >
                   {{ value.saleAttrValueName }}
                 </dd>
@@ -91,12 +91,17 @@
             </div>
             <div class="cartWrap">
               <div class="controls">
-                <input autocomplete="off" class="itxt" />
-                <a href="javascript:" class="plus">+</a>
-                <a href="javascript:" class="mins">-</a>
+                <input
+                  autocomplete="off"
+                  class="itxt"
+                  v-model="skuNum"
+                  @click="changeSkuNum"
+                />
+                <a href="javascript:" class="plus" @click="skuNum++">+</a>
+                <a href="javascript:" class="mins" @click="minNum">-</a>
               </div>
               <div class="add">
-                <a href="javascript:">加入购物车</a>
+                <a href="javascript:" @click="addShopcar">加入购物车</a>
               </div>
             </div>
           </div>
@@ -337,14 +342,19 @@
 <script>
 import ImageList from "./ImageList/Image-List.vue";
 import Zoom from "./Zoom/Zo-om.vue";
-import { mapGetters } from "vuex";
+import { createLogger, mapGetters } from "vuex";
 
 export default {
+  data() {
+    return {
+      skuNum: 1,
+    };
+  },
   components: {
     ImageList,
     Zoom,
   },
-  created(){
+  created() {
     this.$store.dispatch("getGoodInfo", this.$route.params.skuId);
   },
   // mounted() {
@@ -352,12 +362,43 @@ export default {
   // },
   methods: {
     //对产品属性排他操作
-    changeActive(value,spu){
-      spu.forEach(item => {
-        item.isChecked = '0'
+    changeActive(value, spu) {
+      spu.forEach((item) => {
+        item.isChecked = "0";
       });
-      value.isChecked = '1'
-    }
+      value.isChecked = "1";
+    },
+    //个数--操作
+    minNum() {
+      this.skuNum > 1 ? this.skuNum-- : (this.skuNum = 1);
+    },
+    //表单修改个数
+    changeSkuNum(event) {
+      let value = event.target.value;
+      if (isNaN(value) || value < 1) {
+        this.skuNum = 1;
+        alert("请输入整数!");
+      } else {
+        this.skuNum = parseInt(value);
+      }
+    },
+    //add to shopcar
+    async addShopcar() {
+      try {
+        await this.$store.dispatch("addOrUpdateShopCart", {
+          skuId: this.$route.params.skuId,
+          skuNum: this.skuNum
+        });
+        sessionStorage.setItem('SKUINFO',JSON.stringify(this.skuInfo));
+        //返回成功,进行路由跳转
+        this.$router.push({
+          name:'addcartsuccess',
+          query:{skuNum:this.skuNum}
+        })
+      } catch (error) {
+        alert(error.message);
+      }
+    },
   },
   computed: {
     ...mapGetters(["categoryView", "skuInfo", "spuSaleAttrList"]),

@@ -10,6 +10,8 @@ import Search from '../pages/search/indexSearch.vue'
 import Login from '../pages/Login/indexLogin.vue'
 import Register from '../pages/Register/indexRegister.vue'
 import Detail from '../pages/Detail/detail-index.vue'
+import AddCartSuccess from '../pages/AddCartSuccess'
+import ShopCart from '../pages/ShopCart'
 // import home from '@/store/home';
 //拷贝Vuerouter原型对象的push并保存
 let originPush = VueRouter.prototype.push;
@@ -62,7 +64,18 @@ const router = new VueRouter({
             component: Register,
             meta: { show : false }
         },
-        
+        {
+            path: '/addcartsuccess',
+            name: 'addcartsuccess',
+            component: AddCartSuccess,
+            meta: { show : true}
+        },
+        {
+            path: '/shopcart',
+            name: 'shopcart',
+            component: ShopCart,
+            mata: { show: true }
+        },
         //重定向，在项目跑起来的时候，访问/，立马让他定向到home
         {
             path:'*',

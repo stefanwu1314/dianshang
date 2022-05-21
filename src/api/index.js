@@ -20,17 +20,39 @@ export const reqCetFloorList = () => mockRequests({
 })
 //获取search数据地址：/api/list 请求方式：post 有参可有可无
 export const reqSearchInfo = (params) => requests({
-    url:'/list',
-    method:'post',
-    data:params
+    url: '/list',
+    method: 'post',
+    data: params
 })
 //获取详情页
-export const reqGoodsInfo = (skuId) =>requests({
+export const reqGoodsInfo = (skuId) => requests({
     url: `/item/${ skuId }`,
-    method:'get',
-    
+    method: 'get',
+
+})
+//添加到购物车,获取更新产品数量
+export const reqAddOrUpdateShopCart = (skuId, skuNum) => requests({
+    url: `/cart/addToCart/${skuId}/${skuNum}`,
+    method: 'post'
+})
+//获取购物车列表
+export const reqCartList = () => requests({
+    url: '/cart/cartList',
+    method: 'get'
+})
+//删除购物车某一项
+//url:'/api/cart/deleteCart/{skuId}' method:delete
+export const reqDeleteCartItem = (skuId) => requests({
+    url: `/cart/deleteCart/${skuId}`,
+    method: 'delete'
 })
 
+//修改商品选中状态
+//接口地址:'/api/cart/checkCart/{skuId}/{isChecked}' method:'get'
+export const reqCheckCart = (skuId,isChecked) =>requests({
+    url:`/cart/checkCart/${skuId}/${isChecked}`,
+    method: 'get'
+})
 
 
 // const config = {

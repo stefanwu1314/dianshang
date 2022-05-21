@@ -7,6 +7,8 @@ import nprogress from "nprogress";
 //引入nprogress样式
 import "nprogress/nprogress.css";
 
+import store from "@/store";
+
 // 利用axios对象方法create，去创建一个axios实例
 const requests = axios.create({
     //配置对象
@@ -21,6 +23,9 @@ const requests = axios.create({
 requests.interceptors.request.use((config)=>{
     //进度条开始
     nprogress.start();
+    if (store.state.detail.nanoid_token) {
+        config.headers.userTempId = store.state.detail.nanoid_token
+    }
     //config:配置对象，里面headers请求头很重要
     return config;
 })
@@ -36,40 +41,4 @@ requests.interceptors.response.use(res =>{
 
 //对外暴露
 export default requests
-
-//二次封装axios
-// function getAxiosInstance(config){
-//     const defaultConfig = {
-//         baseURL: 'http://39.98.123.211/api'
-//     }
-
-//     const con = Object.assign(defaultConfig, config)
-
-//     let { isLoading } = con
-
-//     let loading = false
-
-//     const axiosInstance = axios.create(Object.assign(defaultConfig,config))
-
-//     axiosInstance.interceptors.request.use(config =>{
-//         if(isLoading){
-//             loading = true
-//             console.log('load start')
-//         }
-//         return config
-//     })
-
-//     axiosInstance.interceptors.response.use(res =>{
-//         if(loading){
-//             console.log('load close')
-//         }
-
-//         return res.data
-//     })
-//     return axiosInstance
-// }
-
-// export default getAxiosInstance
-
-
 

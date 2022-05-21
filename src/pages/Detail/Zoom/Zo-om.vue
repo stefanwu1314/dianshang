@@ -3,9 +3,9 @@
     <img :src="imgObj.imgUrl" />
     <div class="event" @mousemove="handler"></div>
     <div class="big">
-      <img :src="imgObj.imgUrl"  />
+      <img :src="imgObj.imgUrl"  ref="big"/>
     </div>
-    <div class="mask"></div>
+    <div class="mask" ref="mask"></div>
   </div>
 </template>
 
@@ -29,7 +29,24 @@
     },
     methods:{
       handler(event){
+        let mask = this.$refs.mask;
+        let big = this.$refs.big;
+        // console.log(event)
+        let left = event.offsetX - mask.offsetWidth/2;
+        let top = event.offsetY - mask.offsetHeight/2;
+        //约束范围
+        if (left <= 0 ) left = 0;
+        if(left >= mask.offsetWidth) left = mask.offsetWidth;
         
+        if (top <= 0 ) top = 0;
+        if(top >= mask.offsetHeight) top = mask.offsetHeight;
+
+        mask.style.left = left + 'px';
+        mask.style.top = top + 'px';
+
+        big.style.left = -2*left + 'px';
+        big.style.top = -2*top + 'px';
+
       }
     }
   }
