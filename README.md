@@ -1,27 +1,18 @@
-# app
+# 
+本项目是模仿jd商城,实现各个基本业务的页面,样式,交互,数据交互等.
+# 
+首页:能通过三级菜单列表搜索大类及展示,商品的搜索功能
+# 
+商品展示区:细化商品分类检索
+# 
+详情页:商品属性,商品介绍加入购物车等
+# 
+购物车:对购物车内商品的增加,删除,结算等
+#
+用户注册: 手机号,验证码方式注册,游客身份等
+#
+登录:用户登录
 
-## Project setup
-```
-npm install
-```
 
-### Compiles and hot-reloads for development
-```
-npm run serve
-```
-
-### Compiles and minifies for production
-```
-npm run build
-```
-
-### Lints and fixes files
-```
-npm run lint
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
-
-//项目原地址
-http://82.156.11.187/
+注:
+本项目仅作个人练习VUE项目,十分感谢尚硅谷项目实战教程课程

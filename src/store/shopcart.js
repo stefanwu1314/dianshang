@@ -27,6 +27,18 @@ const actions = {
         } else {
             return Promise.reject(new Error('faile'))
         }
+    },
+    //全选
+    checkAllChecked({dispatch,state},isChecked){
+        let promiseAll= [];
+        state.cartlist[0].cartInfoList.forEach(item => {
+            let promise = dispatch('CheckCart',{
+                skuId:item.skuId,
+                isChecked,
+            });
+            promiseAll.push(promise);
+        });
+        return Promise.all(promiseAll);
     }
 };
 const mutations = {

@@ -33,7 +33,9 @@ export default {
   },
   mounted() {
     //派发action，获取floor数据
-    this.$store.dispatch('getFloorList')
+    this.$store.dispatch('getFloorList');
+    //获取用户信息在首页展示
+    this.$store.dispatch('getUserInfo')
   },
   computed:{
     ...mapState({

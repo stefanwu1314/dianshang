@@ -54,6 +54,32 @@ export const reqCheckCart = (skuId,isChecked) =>requests({
     method: 'get'
 })
 
+//获取验证码
+export const reqGetCode = (phone) => requests({
+    url: `/user/passport/sendCode/${phone}`,
+    method: 'get'
+})
+
+//注册
+export const reqUserRegister = (data) => requests({
+    url: '/user/passport/register',
+    data,
+    method: 'post'
+})
+
+//login
+export const reqUserLogin = (data)=>requests({
+    url: '/user/passport/login',
+    data,
+    method:'post'
+})
+
+//携带用户token向服务器获取用户的信息
+export const reqGetUserInfo = () => requests({
+    url:'/user/passport/auth/getUserInfo',
+    method: 'get'
+})
+
 
 // const config = {
 //     isLoading: true

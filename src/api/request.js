@@ -23,9 +23,19 @@ const requests = axios.create({
 requests.interceptors.request.use((config)=>{
     //进度条开始
     nprogress.start();
+    //游客
     if (store.state.detail.nanoid_token) {
         config.headers.userTempId = store.state.detail.nanoid_token
     }
+    //token
+    if(store.state.users.token){
+        config.headers.token = store.state.users.token
+    }
+    let x = localStorage.getItem('TOKEN');
+    if (x) {
+        store.state.users.token = x
+    }
+
     //config:配置对象，里面headers请求头很重要
     return config;
 })
@@ -36,7 +46,7 @@ requests.interceptors.response.use(res =>{
     return res.data
 },(error)=>{
     //响应失败回调
-    return Promise.reject('error')
+    return Promise.reject(error)
 })
 
 //对外暴露

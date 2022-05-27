@@ -64,11 +64,16 @@
     </div>
     <div class="cart-tool">
       <div class="select-all">
-        <input class="chooseAll" type="checkbox" :checked="isAllChecked" />
+        <input
+          class="chooseAll"
+          type="checkbox"
+          @click="checkAll"
+          :checked="isAllChecked && cartInfoList.length>0 && cartInfoList.length!=0"
+        />
         <span>全选</span>
       </div>
       <div class="option">
-        <a href="#none">删除选中的商品</a>
+        <a @click="clearCheck(cartlist.cartInfoList)">删除选中的商品</a>
         <a href="#none">移到我的关注</a>
         <a href="#none">清除下柜商品</a>
       </div>
@@ -111,30 +116,7 @@ export default {
         // alert(error.message)
       }
     },
-    // allCheck(){
-    //   this.getData();
-    // },
-    //节流
-    // throttle(fn, wait) {
-    //   let timeout;
-    //   return () => {
-    //     let context = this;
-    //     let args = arguments;
-    //     // 这里不需要清除定时器 清除了会重新计算时间
-    //     // 清除这个定时器不代表timeout为空
-    //     if (timeout) {
-    //       return false;
-    //     }
-    //     timeout = setTimeout(function () {
-    //       console.log(args)
-    //       fn.apply(context, args);
-    //       timeout = null;
-    //     }, wait);
-    //   };
-    // },
-    // doThrottle(type, disNum, goods){
-    //   this.throttle(this.handler(type, disNum, goods), 500);
-    // },
+    //修改某一个产品的个数,节流
     handler: throttle(async function (type, disNum, goods) {
       switch (type) {
         case "add":
@@ -163,41 +145,29 @@ export default {
         this.getData();
       } catch (error) {}
     }, 1000),
-    //修改某一个产品的个数,节流
-    // async handler(type, disNum, goods){
-    //   // console.log('派发action',type,disNum,goods);
 
-    //   switch (type) {
-    //     case "add":
-    //       disNum = 1;
-    //       break;
-    //     case "minus":
-    //       if (goods.skuNum > 1) {
-    //         disNum = -1;
-    //       } else {
-    //         disNum = 0;
-    //       }
-    //       break;
-    //     case "change":
-    //       if (isNaN(disNum) || disNum < 1) {
-    //         disNum = 0;
-    //       } else {
-    //         disNum = parseInt(disNum) - goods.skuNum;
-    //       }
-    //       break;
-    //   }
-    //   try {
-    //     await this.$store.dispatch("addOrUpdateShopCart", {
-    //       skuId: goods.skuId,
-    //       skuNum: disNum,
-    //     });
-    //     this.getData();
-    //   } catch (error) {}
-    // },
     //删除购物车某一产品
     async deleteCartItem(goods) {
       try {
         await this.$store.dispatch("reqDeleteCartItem", goods.skuId);
+        this.getData();
+      } catch (error) {
+        alert(error.message);
+      }
+    },
+    //删除购物车选中的产品
+    clearCheck(goods) {
+      goods.forEach((item) => {
+        if (item.isChecked == 1) {
+          this.deleteCartItem(item);
+        }
+      });
+    },
+    //全选
+    async checkAll(event) {
+      try {
+        let check = event.target.checked ? "1" : "0";
+        await this.$store.dispatch("checkAllChecked", check);
         this.getData();
       } catch (error) {
         alert(error.message);

@@ -155,7 +155,7 @@ export default {
         //分页器默认第一页
         pageNo: 1,
         //每一页展示的数量
-        pageSize: 5,
+        pageSize: 10,
         //产品属性
         props: [],
         //品牌

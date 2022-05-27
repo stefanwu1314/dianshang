@@ -4,6 +4,7 @@ import home from './home';
 import search from './search'
 import detail from './detail'
 import shopcart from './shopcart'
+import users from './users';
 
 Vue.use(Vuex);
 // //准备actions 响应组件中的动作
@@ -21,6 +22,7 @@ export default new Vuex.Store({
         home,
         search,
         detail,
-        shopcart
+        shopcart,
+        users
     }
 })

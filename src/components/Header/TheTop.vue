@@ -6,12 +6,16 @@
         <div class="container">
           <div class="loginList">
             <p>商城汇欢迎您!</p>
-            <p>
+            <p v-if="!userName">
               <span>请</span>
               <router-link to="/login">登录</router-link>
               <router-link to="/register" class="register"
                 >免费注册</router-link
               >
+            </p>
+            <p v-else>
+              <a>{{ userName }}</a>
+              <a class="register">退出登录</a>
             </p>
           </div>
           <div class="typeList">
@@ -63,10 +67,10 @@ export default {
       keyword: "",
     };
   },
-  mounted(){
-    this.$bus.$on('clearKey',()=>{
-      this.keyword = ''
-    })
+  mounted() {
+    this.$bus.$on("clearKey", () => {
+      this.keyword = "";
+    });
   },
   methods: {
     goSearch() {
@@ -81,14 +85,19 @@ export default {
         let location = {
           name: "search",
           params: {
-            keyword: (this.keyword || undefined),
+            keyword: this.keyword || undefined,
           },
         };
-        location.query = this.$route.query
+        location.query = this.$route.query;
         this.$router.push(location);
       }
-    }
-  }
+    },
+  },
+  computed: {
+    userName() {
+      return this.$store.state.users.userInfo.name;
+    },
+  },
 };
 </script>
 
