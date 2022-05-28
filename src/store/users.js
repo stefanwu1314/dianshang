@@ -61,7 +61,7 @@ const actions = {
 
 const state = {
     code: '',
-    token: '',
+    token: localStorage.getItem('TOKEN'),
     userInfo: ''
 }
 const getters = {}
