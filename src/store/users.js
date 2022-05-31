@@ -1,4 +1,5 @@
-import {reqGetCode,reqUserRegister,reqUserLogin,reqGetUserInfo} from '@/api'
+import {reqUserLogout,reqGetCode,reqUserRegister,reqUserLogin,reqGetUserInfo} from '@/api'
+import { remove } from 'nprogress'
 
 //用于操作数据
 const mutations = {
@@ -10,6 +11,11 @@ const mutations = {
     },
     USERINFO(state,userInfo){
         state.userInfo = userInfo
+    },
+    LOGOUT(state){
+        state.token = '',
+        state.userInfo = {},
+        localStorage.removeItem('TOKEN')
     }
 }
 
@@ -48,13 +54,20 @@ const actions = {
     //获取用户信息
     async getUserInfo({commit}){
         let result = await reqGetUserInfo();
-        console.log(result);
         if (result.code == 200) {
-            
             commit ('USERINFO',result.data)
             return 'ok'
         }else{
             return Promise.reject(new Error('faile'))
+        }
+    },
+    async userLogout({commit}){
+        let res =await reqUserLogout();
+        if (res.code == 200) {
+            commit('LOGOUT')
+            return 'ok'
+        } else {
+            return Promise.reject(new Error(res.message))
         }
     }
 }
@@ -62,7 +75,7 @@ const actions = {
 const state = {
     code: '',
     token: localStorage.getItem('TOKEN'),
-    userInfo: ''
+    userInfo: {}
 }
 const getters = {}
 

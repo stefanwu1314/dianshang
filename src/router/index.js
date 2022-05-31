@@ -12,78 +12,149 @@ import Register from '../pages/Register/indexRegister.vue'
 import Detail from '../pages/Detail/detail-index.vue'
 import AddCartSuccess from '../pages/AddCartSuccess'
 import ShopCart from '../pages/ShopCart'
+import Trade from '../pages/Trade/index.vue'
+import Pay from "../pages/Pay/index.vue";
+import store from '@/store';
+import paySuccess from '../pages/PaySuccess/index.vue'
 // import home from '@/store/home';
 //拷贝Vuerouter原型对象的push并保存
 let originPush = VueRouter.prototype.push;
 let originReplace = VueRouter.prototype.replace;
 //重写Vuerouter原型对象的push | replace方法同push
 //location表示往哪里跳转，resolve成功回调，reject失败回调
-VueRouter.prototype.push = function(location,resolve,reject){
-    if(resolve && reject){
-        originPush.call(this,location,resolve,reject);
-    }else{
-        originPush.call(this,location,() => {},() => {});
+VueRouter.prototype.push = function (location, resolve, reject) {
+    if (resolve && reject) {
+        originPush.call(this, location, resolve, reject);
+    } else {
+        originPush.call(this, location, () => {}, () => {});
     }
 }
-VueRouter.prototype.replace = function(location,resolve,reject){
-    if(resolve && reject){
-        originReplace.call(this,location,resolve,reject);
-    }else{
-        originReplace.call(this,location,() => {},() => {});
+VueRouter.prototype.replace = function (location, resolve, reject) {
+    if (resolve && reject) {
+        originReplace.call(this, location, resolve, reject);
+    } else {
+        originReplace.call(this, location, () => {}, () => {});
     }
 }
 
 //配置路由
 const router = new VueRouter({
-    routes:[
+    routes: [{
+            name: 'home',
+            path: '/home',
+            component: Home,
+            meta: {
+                show: true
+            }
+        },
         {
-            name:'home',
-            path:'/home',
-            component:Home,
-            meta: { show : true }
+            name: 'pay',
+            path: '/pay',
+            component: Pay,
+            meta: {
+                show: true
+            }
+        },
+        {
+            name: 'paysuccess',
+            path: '/paysuccess',
+            component: paySuccess,
+            meta: {
+                show: true
+            }
         },
         {
             name: 'search',
-            path:'/search/:keyword?',
-            component:Search,
-            meta: { show : true }
+            path: '/search/:keyword?',
+            component: Search,
+            meta: {
+                show: true
+            }
+        },
+        {
+            name: 'trade',
+            path: '/trade',
+            component: Trade,
+            meta: {
+                show: true
+            }
         },
         {
             path: '/login',
             component: Login,
-            meta: { show : false }
+            meta: {
+                show: false
+            }
         },
         {
-            name:'detail',
-            path:'/detail/:skuId',
-            component:Detail,
-            meta: { show : true }
+            name: 'detail',
+            path: '/detail/:skuId',
+            component: Detail,
+            meta: {
+                show: true
+            }
         },
         {
             path: '/register',
             component: Register,
-            meta: { show : false }
+            meta: {
+                show: false
+            }
         },
         {
             path: '/addcartsuccess',
             name: 'addcartsuccess',
             component: AddCartSuccess,
-            meta: { show : true}
+            meta: {
+                show: true
+            }
         },
         {
             path: '/shopcart',
             name: 'shopcart',
             component: ShopCart,
-            mata: { show: true }
+            mata: {
+                show: true
+            }
         },
         //重定向，在项目跑起来的时候，访问/，立马让他定向到home
         {
-            path:'*',
+            path: '*',
             redirect: '/home'
         }
     ],
-    scrollBehavior(){
-        return{y:0}
+    scrollBehavior() {
+        return {
+            y: 0
+        }
+    }
+})
+
+router.beforeEach(async (to, from, next) => {
+    let token = store.state.users.token;
+    if (token) {
+        if (to.path == '/login') {
+            alert('已经是登录状态了');
+            next({
+                name: 'home'
+            });
+        } else {
+            try {
+                await store.dispatch('getUserInfo');
+                next();
+            } catch (error) {
+                await store.dispatch('userLogout');
+                next('/login')
+            }
+        }
+
+    } else {
+        if (to.path == '/shopcart' || to.name =='addcartsuccess') {
+            alert('请先登录');
+            next('/login');
+        }else{
+            next();
+        }
     }
 })
 

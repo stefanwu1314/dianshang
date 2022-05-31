@@ -5,6 +5,7 @@ import search from './search'
 import detail from './detail'
 import shopcart from './shopcart'
 import users from './users';
+import trade from "./trade";
 
 Vue.use(Vuex);
 // //准备actions 响应组件中的动作
@@ -23,6 +24,7 @@ export default new Vuex.Store({
         search,
         detail,
         shopcart,
-        users
+        users,
+        trade
     }
 })

@@ -16,12 +16,15 @@ Vue.component(Pagination.name,Pagination)
 //引入mockServer.js
 import '@/mock/mockServer';
 
+import * as API from "@/api";
+
 // reqCategoryList().then(res => console.log(res))
 
 new Vue({
   render: h => h(App),
   beforeCreate(){
-    Vue.prototype.$bus = this
+    Vue.prototype.$bus = this;
+    Vue.prototype.$API = API;
   },
 
   //组件身上多了$store属性

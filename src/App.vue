@@ -19,6 +19,7 @@ export default {
   mounted() {
     //获取商品分类数据
     this.$store.dispatch("categoryList");
+    this.$store.dispatch('getUserInfo')
   },
 }
 </script>
