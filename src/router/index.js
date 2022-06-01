@@ -16,6 +16,9 @@ import Trade from '../pages/Trade/index.vue'
 import Pay from "../pages/Pay/index.vue";
 import store from '@/store';
 import paySuccess from '../pages/PaySuccess/index.vue'
+import Center from "../pages/Center/index.vue";
+import groupOrder from "../pages/Center/groupOrder/index.vue";
+import myOrder from "../pages/Center/myOrder/index.vue";
 // import home from '@/store/home';
 //拷贝Vuerouter原型对象的push并保存
 let originPush = VueRouter.prototype.push;
@@ -56,12 +59,44 @@ const router = new VueRouter({
             }
         },
         {
+            name: 'center',
+            path: '/center',
+            component: Center,
+            meta: {
+                show: true
+            },
+            children: [{
+                    name: 'myorder',
+                    path: '/myorder',
+                    component: myOrder,
+                },
+                {
+                    name: 'grouporder',
+                    path: '/grouporder',
+                    component: groupOrder,
+                },
+                {
+                    path: '/center',
+                    redirect: '/center/myorder'
+                }
+            ]
+
+        },
+        {
             name: 'paysuccess',
             path: '/paysuccess',
             component: paySuccess,
             meta: {
                 show: true
-            }
+            },
+            // children:[{
+            //     name:Center,
+            //     path:'/center',
+            //     component:Center,
+            //     meta:{
+            //         show:true
+            //     }
+            // }]
         },
         {
             name: 'search',
@@ -149,10 +184,10 @@ router.beforeEach(async (to, from, next) => {
         }
 
     } else {
-        if (to.path == '/shopcart' || to.name =='addcartsuccess') {
+        if (to.path == '/shopcart' || to.name == 'addcartsuccess') {
             alert('请先登录');
             next('/login');
-        }else{
+        } else {
             next();
         }
     }

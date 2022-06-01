@@ -93,7 +93,6 @@
 
 <script>
 import QRCode from "qrcode";
-import { done } from "nprogress";
 export default {
   name: "Pay",
   data() {
@@ -173,7 +172,6 @@ export default {
             this.$router.push("/paysuccess");
           }
         }, 1000);
-      } else {
       }
     },
   },
